@@ -4,17 +4,22 @@ precioTotal:: Producto -> Int -> Int -> Int -> Producto
 precioTotal unProducto unaCantidad unDescuento unCostoEnvio = (aplicarCostoDeEnvio unCostoEnvio).(aplicarUnaCantidad unaCantidad).(aplicarDescuento unDescuento) $ unProducto
 
 aplicarDescuento:: Int -> Producto -> Producto
-aplicarDescuento unDescuento unProducto = (conseguirNombre unProducto, (restar unDescuento).conseguirPrecio $ unProducto)
+aplicarDescuento unDescuento unProducto = (conseguirNombre unProducto, (subtract unDescuento).conseguirPrecio $ unProducto)
+
+
+aplicarFuncionProducto:: Producto -> a -> (a -> String -> String) -> Producto
+aplicarFuncionProducto unProducto unValor unaFuncion  = ((unaFuncion unValor).conseguirNombre $ unProducto, conseguirPrecio unProducto)
 
 descodiciarProducto:: Producto -> Producto
-descodiciarProducto unProducto = ((take 10).conseguirNombre $ unProducto, conseguirPrecio unProducto)
+descodiciarProducto unProducto = aplicarFuncionProducto unProducto 10 (take)
+-- ((take 10).conseguirNombre $ unProducto, conseguirPrecio unProducto)
 
 versionBarata:: Producto -> Producto
 versionBarata unProducto = (reverse.conseguirNombre.descodiciarProducto $ unProducto , conseguirPrecio unProducto)
 
 productoXL:: Producto -> Producto
-productoXL unProducto = ((++ "XL").conseguirNombre $ unProducto , conseguirPrecio unProducto)
-
+productoXL unProducto = aplicarFuncionProducto unProducto "XL" (++)
+--((++ "XL").conseguirNombre $ unProducto , conseguirPrecio unProducto)
 
 
 entregaSencilla:: String -> Bool
@@ -30,7 +35,9 @@ productoCodiciado:: Producto -> Bool
 productoCodiciado unProducto = (>10).length.conseguirNombre $ unProducto
 
 productoDeLujo:: Producto -> Bool
-productoDeLujo unProducto = ((contieneCaracter 'x').conseguirNombre $ unProducto) || ((contieneCaracter 'z').conseguirNombre $ unProducto)
+productoDeLujo unProducto = nombreDeLujo.conseguirNombre $ unProducto
+nombreDeLujo:: String -> Bool
+nombreDeLujo unNombre =  elem 'x' unNombre || elem 'z' unNombre
 
 aplicarCostoDeEnvio:: Int -> Producto -> Producto
 aplicarCostoDeEnvio unCostoEnvio unProducto = (conseguirNombre unProducto, (+ unCostoEnvio).conseguirPrecio $ unProducto)
@@ -44,19 +51,15 @@ conseguirPrecio:: Producto -> Int
 conseguirPrecio (_ , unPrecio) = unPrecio
 
 empiezaConVocal:: String -> Bool
-empiezaConVocal unNombre = (`elem` vocal).head $ unNombre
-vocal:: String
-vocal = "AEIOUaeiouÁÉÍÓÚáéíóú"
-
-contieneCaracter:: Char -> String -> Bool
-contieneCaracter unCaracter unString = elem unCaracter unString
+empiezaConVocal unNombre = (`elem` vocales).head $ unNombre
+vocales:: String
+vocales = "AEIOUaeiouÁÉÍÓÚáéíóú"
 
 esPar:: Int -> Bool
-esPar unValor = (==0).(rem unValor) $ 2
+esPar unValor = even.(rem unValor) $ 2
 
 aplicarUnaCantidad::  Int -> Producto -> Producto
 aplicarUnaCantidad unaCantidad unProducto = (conseguirNombre unProducto , (* unaCantidad).conseguirPrecio $ unProducto)
 
-restar:: Int -> Int -> Int
-restar unDescuento unPrecio = unPrecio - unDescuento
+
 
