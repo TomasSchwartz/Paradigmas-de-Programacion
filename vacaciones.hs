@@ -1,8 +1,8 @@
-data Turista = UnTurista{ nivelDeCansancio :: Int , nivelDeStress :: Int , viajaSolo :: Bool , idiomasQueHabla ::[String] }
+data Turista = UnTurista{ nivelDeCansancio :: Int , nivelDeStress :: Int , viajaSolo :: Bool , idiomasQueHabla ::[String] } deriving (Show)
 
 --Turistas--
 ana :: Turista
-ana = UnTurista{nivelDeCansancio = 0 , nivelDeStress = 21 , viajaSolo = False , idiomasQueHabla = ["Español"]}
+ana = UnTurista{nivelDeCansancio = 0 , nivelDeStress = 21 , viajaSolo = False , idiomasQueHabla = ["Español"]} 
 
 beto :: Turista
 beto = UnTurista{nivelDeCansancio = 15 , nivelDeStress = 15 , viajaSolo = True , idiomasQueHabla = ["Alemán"]}
