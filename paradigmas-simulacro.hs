@@ -76,7 +76,7 @@ vistazo :: Artista -> [Cancion]
 vistazo unArtista = primeras3CancionesCortas unArtista
 
 primeras3CancionesCortas :: Artista -> [Cancion]
-primeras3CancionesCortas unArtista = filter esCancionCorta (canciones unArtista)
+primeras3CancionesCortas unArtista = (take 3) . filter esCancionCorta $ (canciones unArtista)  
 
 esCancionCorta :: Cancion -> Bool
 esCancionCorta unaCancion = ((>)150) . duracion $ unaCancion
